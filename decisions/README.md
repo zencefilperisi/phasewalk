@@ -48,13 +48,14 @@ obvious.
 
 ## Index
 
-| ID   | Title                                        | Status              |
-|------|----------------------------------------------|---------------------|
-| 0001 | Dataset choice for Phase 2                   | superseded by 0003  |
-| 0002 | Quantum-walk conventions                     | accepted            |
-| 0003 | Switch to short-term dataset                 | accepted            |
-| 0004 | Seizure duration policy                      | accepted            |
-| 0005 | Patient-level analysis                       | accepted            |
-| 0006 | ID1 as development patient                   | accepted            |
+| ID   | Title                                                     | Status              |
+|------|-----------------------------------------------------------|---------------------|
+| 0001 | Dataset choice for Phase 2                                | superseded by 0003  |
+| 0002 | Quantum-walk conventions                                  | accepted            |
+| 0003 | Switch to short-term dataset                              | accepted            |
+| 0004 | Seizure duration policy                                   | accepted            |
+| 0005 | Patient-level analysis                                    | accepted            |
+| 0006 | ID1 as development patient                                | accepted            |
+| 0007 | Functional connectivity extraction methodology (Phase 2C) | accepted            |
 
 New entries get appended to this table as they are added.
