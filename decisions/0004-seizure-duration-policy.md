@@ -2,9 +2,9 @@
 
 **Status:** accepted
 
-**Date:** 2026-05-27
+**Date:** 2026-07-24
 
-**Author:** project owner (with methodological review)
+**Author:** Hatice Nalçacı
 
 ---
 

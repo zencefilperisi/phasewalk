@@ -2,9 +2,9 @@
 
 **Status:** accepted (with one open question flagged for Phase 2)
 
-**Date:** 2026-05-23
+**Date:** 2026-07-19
 
-**Author:** project owner (implementation), with assistance
+**Author:** Hatice Nalçacı
 
 ---
 

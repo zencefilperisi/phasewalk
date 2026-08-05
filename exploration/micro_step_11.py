@@ -1,23 +1,5 @@
 """
 Micro-step 11: Scan all seizure files across ID1, ID2, ID3.
-
-Micro-step 10 opened ONE file and looked at it visually. That is the
-right first step, but before writing analysis code we need to know
-whether the other 18 files (13+4+2) are structurally similar or hide
-surprises.
-
-This script visits every Sz*.mat file in the three patient folders
-and reports, in a compact table:
-    patient, seizure file, shape, orientation OK?, duration, n_electrodes
-
-We are looking for:
-  - Do all patients have the SAME format we saw for ID1/Sz1?
-  - Are electrode counts consistent WITHIN a patient?
-  - Are electrode counts DIFFERENT ACROSS patients? (they will be,
-    but by how much?)
-  - Any file that fails to load? Any weird shape? Any missing file?
-
-Fill in the TODOs and run.
 """
 from pathlib import Path
 
@@ -25,26 +7,13 @@ import numpy as np
 import scipy.io as sio
 
 
-# --------------------------------------------------------------------------- #
-# TODO 1: set BASE to the folder that contains ID1, ID2, ID3 as subfolders.
-#
-# Example (Windows) — the parent folder of ID1, ID2, ID3:
-#   BASE = Path(r"C:\Users\User\Desktop\SWEC")
-#
-# NOT the ID1 folder itself. The folder ABOVE the patient folders.
-#
-BASE = Path(r"C:\Users\User\Desktop\SWEC")   # <-- TODO 1
-# --------------------------------------------------------------------------- #
-
-if BASE is None:
-    raise SystemExit("TODO 1 not done: set BASE.")
+BASE = Path(r"C:\Users\User\Desktop\SWEC")
 
 PATIENTS = ["ID1", "ID2", "ID3"]
-FS = 512  # sampling frequency, Hz
+FS = 512
 
 
 def load_and_summarize(mat_path):
-    """Return a dict summarizing one .mat file (or an error field)."""
     try:
         mat = sio.loadmat(str(mat_path))
     except Exception as e:
@@ -59,9 +28,6 @@ def load_and_summarize(mat_path):
 
     n_rows, n_cols = EEG.shape
 
-    # Short-term docs: T x M with T=time, M=electrodes.
-    # Electrode count is 36-100; time is hundreds of thousands.
-    # So bigger axis is time.
     if n_rows > n_cols:
         n_time, n_electrodes = n_rows, n_cols
         orientation = "T x M (as documented)"
@@ -85,9 +51,6 @@ def load_and_summarize(mat_path):
     }
 
 
-# --------------------------------------------------------------------------- #
-# Walk the three patient folders and collect summaries.
-# --------------------------------------------------------------------------- #
 rows = []
 for pid in PATIENTS:
     folder = BASE / pid
@@ -103,9 +66,6 @@ for pid in PATIENTS:
         rows.append({"patient": pid, "file": f.name, **summary})
 
 
-# --------------------------------------------------------------------------- #
-# Print a compact, aligned table.
-# --------------------------------------------------------------------------- #
 print()
 print(f"{'patient':<8} {'file':<10} {'shape':<20} {'n_elec':>7} "
       f"{'dur (s)':>9} {'seiz (s)':>9}  {'notes'}")
@@ -121,9 +81,6 @@ for r in rows:
           f"{r['duration_s']:>9.1f} {r['seizure_len_s']:>9.1f}  {notes}")
 
 
-# --------------------------------------------------------------------------- #
-# Per-patient consistency check (done for you).
-# --------------------------------------------------------------------------- #
 print()
 print("Per-patient consistency:")
 for pid in PATIENTS:

@@ -2,9 +2,9 @@
 
 **Status:** accepted (supersedes the dataset choice in ADR 0001)
 
-**Date:** 2026-05-26
+**Date:** 2026-07-23
 
-**Author:** project owner (with literature/site review)
+**Author:** Hatice Nalçacı
 
 ---
 

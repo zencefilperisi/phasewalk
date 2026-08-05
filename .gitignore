@@ -43,3 +43,5 @@ theory/*.log
 theory/*.out
 theory/*.toc
 theory/*.synctex.gz
+
+exploration/figures/

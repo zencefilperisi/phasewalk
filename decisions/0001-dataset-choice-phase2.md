@@ -2,9 +2,9 @@
 
 **Status:** accepted
 
-**Date:** 2026-05-16
+**Date:** 2026-07-16
 
-**Author:** project owner (with literature search support)
+**Author:** Hatice Nalçacı
 
 ---
 

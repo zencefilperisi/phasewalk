@@ -17,6 +17,11 @@ They are kept in the repository for transparency and as a record of
 how the understanding was developed. They are NOT part of the tested
 production code path.
 
+Note on numbering: `micro_step_12` is intentionally missing. Step 12
+was not an exploration script — it was the promotion of the loading
+logic into the tested `../data/` module. See the commit history and
+ADR 0007 for details.
+
 | Script | What it introduced |
 |--------|--------------------|
 | `micro_step_1.py`  | Building and drawing a small-world graph (NetworkX) |
@@ -30,3 +35,4 @@ production code path.
 | `micro_step_9.py`  | Spectral participation as a much stronger (but tautological — see decision log) predictor |
 | `micro_step_10.py` | First inspection of a real iEEG seizure recording |
 | `micro_step_11.py` | Bulk scan and shape check across all seizure files for ID1, ID2, ID3 |
+| `micro_step_13.py` | First real Pearson functional connectivity matrix from ID1/Sz1 ictal segment |

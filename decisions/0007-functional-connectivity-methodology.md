@@ -2,9 +2,9 @@
 
 **Status:** accepted
 
-**Date:** 2026-05-27
+**Date:** 2026-08-04
 
-**Author:** project owner (with literature review)
+**Author:** Hatice Nalçacı
 
 ---
 
@@ -128,6 +128,17 @@ change?" A disagreement between Layer 1 and Layer 2 is itself a
 finding — it tells us the effect depends on either duration or on
 which phase of the seizure is included.
 
+**Comparison protocol:** When comparing Layer 1 with Layer 2, the
+comparison is restricted to the subset of seizures that qualify for
+Layer 2 (ictal duration >= 30 s). Layer 1 results on this subset are
+compared against Layer 2 results on the same subset. This isolates
+the effect of "full ictal vs first 30 s" from the effect of "different
+sample of seizures". Short seizures are NOT excluded from the primary
+Layer 1 analysis — they contribute to the full-cohort Layer 1 result,
+which is reported alongside the matched subset comparison. This
+satisfies ADR 0004's rule that no seizure is discarded on the basis
+of duration alone.
+
 This structure is a direct application of ADR 0004's duration-stratified
 reporting policy: keep all seizures in the primary analysis, always
 report a matched-duration replication, and treat any disagreement as
@@ -205,3 +216,9 @@ Rationale:
 - Whether to add anatomy-informed constraints (e.g., grouping
   electrodes by lobe) remains open and depends on whether SWEC-ETHZ
   provides usable electrode coordinates for our patients.
+- If Layer 1 and Layer 2 produce systematically different results, we
+  will need a procedure to distinguish (a) duration acting as a
+  confounder, (b) different seizure phases producing different graphs,
+  and (c) both. This will require a sliding-window analysis, which
+  is deferred to a follow-up ADR (candidate 0008), to be written when
+  we actually observe the disagreement — not before.
