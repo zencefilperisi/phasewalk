@@ -57,5 +57,6 @@ obvious.
 | 0005 | Patient-level analysis                                    | accepted            |
 | 0006 | ID1 as development patient                                | accepted            |
 | 0007 | Functional connectivity extraction methodology (Phase 2C) | accepted            |
+| 0008 | Signed FCM handling (negatives + diagonal)                | accepted            |
 
 New entries get appended to this table as they are added.

@@ -1,8 +1,8 @@
 """
 Phasewalk — data module.
 
-Loading and structuring intracranial EEG recordings from the
-SWEC-ETHZ short-term dataset.
+Loading and structuring intracranial EEG recordings, plus computing
+functional connectivity and converting FCMs into graph-usable form.
 """
 from .loader import (
     FS_HZ,
@@ -15,8 +15,10 @@ from .loader import (
     load_patient,
     load_seizure,
 )
+from .connectivity import compute_fcm, fcm_to_graph
 
 __all__ = [
+    # loader
     "Seizure",
     "LoaderError",
     "load_seizure",
@@ -26,4 +28,7 @@ __all__ = [
     "POST_ICTAL_LENGTH_S",
     "MIN_ELECTRODES",
     "MAX_ELECTRODES",
+    # connectivity
+    "compute_fcm",
+    "fcm_to_graph",
 ]
