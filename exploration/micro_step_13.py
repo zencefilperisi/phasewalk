@@ -5,6 +5,8 @@ import sys
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
+FIG_DIR = Path(__file__).resolve().parent / "figures"
+FIG_DIR.mkdir(exist_ok=True)
 
 import numpy as np
 import matplotlib.pyplot as plt
@@ -61,7 +63,7 @@ axes[1].set_title("Distribution of off-diagonal FCM entries")
 axes[1].legend()
 
 plt.tight_layout()
-plt.savefig("figures/micro_step_13_graph.png", dpi=150, bbox_inches="tight")
+plt.savefig(FIG_DIR / "micro_step_13_first_fcm.png", dpi=150, bbox_inches="tight")
 plt.show()
 
-print("\nDone. Figure saved as micro_step_13_first_fcm.png")
+print(f"\nDone. Figure saved as {FIG_DIR / 'micro_step_13_first_fcm.png'}")

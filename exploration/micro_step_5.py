@@ -1,10 +1,14 @@
 """
 Micro-step 5: Understand the quantum walk through three checks.
 """
+from pathlib import Path
 import numpy as np
 import networkx as nx
 import matplotlib.pyplot as plt
 from scipy.linalg import expm
+
+FIG_DIR = Path(__file__).resolve().parent / "figures"
+FIG_DIR.mkdir(exist_ok=True)
 
 G = nx.watts_strogatz_graph(n=20, k=4, p=0.3, seed=42)
 A = nx.to_numpy_array(G)
@@ -66,6 +70,6 @@ axes[1].grid(alpha=0.3)
 fig.suptitle("Quantum walk properties on the small-world graph")
 
 plt.tight_layout()
-plt.savefig("figures/micro_step_5_graph.png", dpi=150, bbox_inches="tight")
+plt.savefig(FIG_DIR / "micro_step_5_properties.png", dpi=150, bbox_inches="tight")
 plt.show()
-print("\nDone. Figure saved as micro_step_5_properties.png")
+print(f"\nDone. Figure saved as {FIG_DIR / 'micro_step_5_properties.png'}")

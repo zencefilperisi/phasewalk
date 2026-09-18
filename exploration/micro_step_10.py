@@ -1,10 +1,13 @@
 """
 Micro-step 10: First look at real iEEG data.
 """
+from pathlib import Path
 import numpy as np
 import scipy.io as sio
 import matplotlib.pyplot as plt
 
+FIG_DIR = Path(__file__).resolve().parent / "figures"
+FIG_DIR.mkdir(exist_ok=True)
 
 MAT_PATH = r"C:\Users\User\Desktop\SWEC\ID1\Sz1.mat"
 
@@ -65,7 +68,7 @@ axes[0].legend(loc="upper right")
 axes[-1].set_xlabel("time (s)")
 fig.suptitle(f"iEEG recording — {MAT_PATH.split(chr(92))[-1]}", fontsize=13)
 plt.tight_layout()
-plt.savefig("figures/micro_step_10_graph.png", dpi=150, bbox_inches="tight")
+plt.savefig(FIG_DIR / "micro_step_10_first_look.png", dpi=150, bbox_inches="tight")
 plt.show()
 
-print("\nDone. Figure saved as micro_step_10_first_look.png")
+print(f"\nDone. Figure saved as {FIG_DIR / 'micro_step_10_first_look.png'}")

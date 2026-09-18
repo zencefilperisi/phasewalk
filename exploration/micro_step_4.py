@@ -1,10 +1,14 @@
 """
 Micro-step 4: Continuous-time QUANTUM walk, compared with classical.
 """
+from pathlib import Path
 import numpy as np
 import networkx as nx
 import matplotlib.pyplot as plt
 from scipy.linalg import expm
+
+FIG_DIR = Path(__file__).resolve().parent / "figures"
+FIG_DIR.mkdir(exist_ok=True)
 
 G = nx.watts_strogatz_graph(n=20, k=4, p=0.3, seed=42)
 A = nx.to_numpy_array(G)
@@ -58,6 +62,6 @@ fig.colorbar(sm, ax=axes, fraction=0.02, pad=0.02, label="probability")
 
 fig.suptitle("Classical diffusion (top) vs quantum walk (bottom), "
              "same graph, same start (node 0)", fontsize=14)
-plt.savefig("figures/micro_step_4_graph.png", dpi=150, bbox_inches="tight")
+plt.savefig(FIG_DIR / "micro_step_4_comparison.png", dpi=150, bbox_inches="tight")
 plt.show()
-print("\nDone. Figure saved as micro_step_4_comparison.png")
+print(f"\nDone. Figure saved as {FIG_DIR / 'micro_step_4_comparison.png'}")

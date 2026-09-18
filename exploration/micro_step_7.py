@@ -5,6 +5,8 @@ import sys
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
+FIG_DIR = Path(__file__).resolve().parent / "figures"
+FIG_DIR.mkdir(exist_ok=True)
 
 import numpy as np
 import networkx as nx
@@ -27,11 +29,6 @@ degree = np.array([dict(G.degree())[i] for i in range(n)])
 betweenness = np.array([nx.betweenness_centrality(G)[i] for i in range(n)])
 eigenvector = np.array([nx.eigenvector_centrality(G, max_iter=1000)[i] for i in range(n)])
 clustering = np.array([nx.clustering(G)[i] for i in range(n)])
-
-for name, vec in [("degree", degree), ("betweenness", betweenness),
-                  ("eigenvector", eigenvector), ("clustering", clustering)]:
-    if vec is None:
-        raise SystemExit(f"{name} is still None.")
 
 measures = {
     "degree": degree,
@@ -63,7 +60,7 @@ axes[0].set_ylabel("time-averaged participation ratio")
 fig.suptitle("Which node property best predicts quantum-walk spread?",
              fontsize=14)
 plt.tight_layout()
-plt.savefig("figures/micro_step_7_graph.png", dpi=150, bbox_inches="tight")
+plt.savefig(FIG_DIR / "micro_step_7_centrality.png", dpi=150, bbox_inches="tight")
 plt.show()
 
-print("\nDone. Figure saved as micro_step_7_centrality.png")
+print(f"\nDone. Figure saved as {FIG_DIR / 'micro_step_7_centrality.png'}")

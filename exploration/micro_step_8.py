@@ -5,6 +5,8 @@ import sys
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
+FIG_DIR = Path(__file__).resolve().parent / "figures"
+FIG_DIR.mkdir(exist_ok=True)
 
 import numpy as np
 import networkx as nx
@@ -62,7 +64,7 @@ ax.set_title(f"Distribution of the clustering-spread correlation "
              f"across {len(correlations)} random graphs")
 ax.legend()
 plt.tight_layout()
-plt.savefig("figures/micro_step_8_graph.png", dpi=150, bbox_inches="tight")
+plt.savefig(FIG_DIR / "micro_step_8_robustness.png", dpi=150, bbox_inches="tight")
 plt.show()
 
-print("\nDone. Figure saved as micro_step_8_robustness.png")
+print(f"\nDone. Figure saved as {FIG_DIR / 'micro_step_8_robustness.png'}")
