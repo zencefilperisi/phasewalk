@@ -58,5 +58,7 @@ obvious.
 | 0006 | ID1 as development patient                                | accepted            |
 | 0007 | Functional connectivity extraction methodology (Phase 2C) | accepted            |
 | 0008 | Signed FCM handling (negatives + diagonal)                | accepted            |
+| 0009 | Phase 2C analysis reframing                               | accepted            |
+| 0010 | Dataset limits for clinical validation and staged strategy| accepted            |
 
 New entries get appended to this table as they are added.

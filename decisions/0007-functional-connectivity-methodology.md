@@ -222,3 +222,5 @@ Rationale:
   and (c) both. This will require a sliding-window analysis, which
   is deferred to a follow-up ADR (candidate 0008), to be written when
   we actually observe the disagreement — not before.
+- The classical-vs-quantum rank correlation question raised implicitly
+  here has been dropped; see ADR 0009 for the reframed analysis.
