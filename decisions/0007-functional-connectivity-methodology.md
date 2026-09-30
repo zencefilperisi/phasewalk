@@ -224,3 +224,118 @@ Rationale:
   we actually observe the disagreement — not before.
 - The classical-vs-quantum rank correlation question raised implicitly
   here has been dropped; see ADR 0009 for the reframed analysis.
+
+  # Note added 2026-09-30 (from micro-steps 15, 16, 15b diagnostic)
+
+**Status of the ADR itself:** unchanged. This note extends the ADR
+with empirical findings; it does not revise any of the original
+decisions.
+
+## Empirical background
+
+Cross-seizure consistency of CTQW-based per-electrode participation
+ratio rankings was tested on ID1 (per ADR 0006, ID1 is the development
+patient). Three measurements:
+
+| Setting                                                | Seizures | Mean pairwise Spearman rho |
+|--------------------------------------------------------|---------:|---------------------------:|
+| Layer 1, all seizures (micro-step 15)                  |       13 |                    +0.310  |
+| Layer 1, subset ictal >= 30 s (micro-step 16)          |        9 |                    +0.410  |
+| Layer 2, first 30 s of same subset (micro-step 16)     |        9 |                    +0.241  |
+
+The +0.100 shift from all-seizures Layer 1 to long-only subset Layer 1
+raised a legitimate concern: is that shift a duration effect, or just
+an artefact of dropping n? Micro-step 15b decomposed the 78 pairs into
+those involving at least one short seizure (Group A) and those among
+long seizures only (Group B):
+
+| Group                                | Pairs | Mean rho |
+|--------------------------------------|------:|---------:|
+| A (>= 1 short seizure, <30 s)        |    42 |   +0.225 |
+| B (both seizures long, >=30 s)       |    36 |   +0.410 |
+
+Mann-Whitney U p < 0.0001. Group B mean matches the Layer 1 subset
+mean exactly — sanity check passed.
+
+## Two findings
+
+**Finding 1 — short seizures (<30 s) genuinely add noise to the FCM,
+not merely reduce n.**
+The individual pair rhos are systematically lower when a short seizure
+is involved. This is a real signal, not a sampling artefact. The 30-s
+minimum window from Bastos & Schoffelen (2016) is validated empirically
+for this dataset: with fewer than about 15,000 samples per channel, the
+Pearson FCM is too variable to give a stable per-electrode CTQW
+ranking.
+
+**Finding 2 — Layer 2 (first 30 s) is LESS consistent than Layer 1
+(full ictal) on the same seizures.**
+Contrary to the assumption that a fixed window would reduce noise and
+raise cross-seizure consistency, restricting to the first 30 s DROPS
+mean pairwise Spearman by -0.169 (from +0.410 to +0.241). The best
+reading of this is biological:
+
+- The seizure **onset** phase is per-seizure heterogeneous — different
+  onset zones, different propagation patterns.
+- The **full ictal** recording averages over onset + plateau +
+  resolution. The shared plateau structure carries a more stable
+  ranking signature that shows up across seizures.
+
+## What this changes in interpretation
+
+The original motivation for Layer 2 (ADR 0007 sub-decision 4) was
+"robustness check for FCM sampling bias." That framing assumed a
+fixed-window FCM would give more comparable rankings across seizures.
+The data shows this assumption is wrong for CTQW ranking consistency
+in ID1.
+
+Layer 2 is **retained** but its interpretive role is reframed:
+
+- **Layer 1 (full ictal, primary):** characterises the stereotyped
+  ictal network signature of the patient. Higher cross-seizure
+  consistency. This is what CTQW ranking is best at.
+- **Layer 2 (first 30 s, secondary):** now framed as characterising
+  the seizure **onset** network — a different biological question, not
+  a check on Layer 1. Lower cross-seizure consistency by design,
+  because onset is heterogeneous.
+
+The two layers therefore answer different questions:
+- "What is this patient's ictal-network signature?" → Layer 1
+- "What does the onset network look like across seizures?" → Layer 2
+
+## What does NOT change
+
+- ADR 0007 sub-decisions 1 (Pearson primary), 2 (PLV robustness),
+  3 (broadband 0.5-150 Hz), and 5 (no thresholding) are unchanged.
+- The Comparison Protocol (when comparing Layer 1 with Layer 2, use
+  the matched Layer-2-qualifying subset for both) is unchanged.
+- ADR 0009's primary quantity (Layer 1 CTQW per-electrode PR ranking)
+  is unchanged.
+- ADR 0004's rule that no seizure is discarded on the basis of duration
+  alone in the PRIMARY analysis is unchanged: short seizures still
+  contribute to the full-cohort Layer 1 result, and both the
+  full-cohort (+0.310) and long-only-subset (+0.410) numbers are
+  reported alongside each other.
+
+## Resolved open question
+
+The earlier "Open questions to revisit" item — "If Layer 1 and Layer 2
+produce systematically different results, we will need a procedure to
+distinguish (a) duration acting as a confounder, (b) different seizure
+phases producing different graphs, (c) both" — is now resolved:
+
+- (a) Duration IS a confounder for short seizures — validated by
+  micro-step 15b (Mann-Whitney U p < 0.0001).
+- (b) Different seizure phases DO produce different graphs — validated
+  by micro-step 16 (Layer 1 vs Layer 2 mean per-seizure rho = +0.478,
+  and within-cohort Layer 2 mean is -0.169 lower than Layer 1).
+- (c) Both effects operate; they were separated by the sequence
+  15 → 16 → 15b.
+
+## New open question
+
+Does the "onset heterogeneous, full-ictal stereotyped" pattern hold
+in ID2 and ID3? If yes, it is a patient-general property of ictal
+networks and part of the methodological contribution. If no, ID1 has
+an unusual dynamic and the framing needs revision. To be tested in
+the ID2 replication (planned micro-step 17).
