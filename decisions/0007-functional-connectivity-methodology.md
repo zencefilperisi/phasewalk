@@ -339,3 +339,52 @@ in ID2 and ID3? If yes, it is a patient-general property of ictal
 networks and part of the methodological contribution. If no, ID1 has
 an unusual dynamic and the framing needs revision. To be tested in
 the ID2 replication (planned micro-step 17).
+
+# Note added 2026-10-03 (ID2/ID3 replication of the onset finding)
+
+The 2026-09-30 note raised an open question: does the "onset
+heterogeneous, full-ictal stereotyped" pattern (Layer 2 less consistent
+than Layer 1) hold in ID2 and ID3? Micro-steps 17 and 18 answered it.
+
+| Patient | Seizures used | within-L1 mean rho | L2 − L1 |
+|---------|--------------:|-------------------:|--------:|
+| ID1     | 9 (>=30 s)    |            +0.410  | −0.169  |
+| ID2     | 4             |            +0.630  | +0.004  |
+| ID3     | 2 (1 pair)    |            +0.535  | −0.095  |
+
+## Finding
+
+Two of three patients (ID1, ID3) show a weak negative L2 − L1 — the
+seizure onset window gives slightly less consistent CTQW rankings than
+the full ictal. One (ID2) shows essentially none. ID3's value rests on
+a single seizure pair, so its weight is low.
+
+**Conclusion:** the onset-heterogeneity effect is a WEAK, INCONSISTENT
+tendency, not a robust patient-general property. We cannot make a firm
+claim either way with 2–4 seizures per replication patient. The honest
+statement is: in the development patient and one replication patient the
+onset window is slightly less stable than the full ictal; in the other
+replication patient it is not.
+
+A candidate mechanistic explanation — that very long seizures wash out
+the onset/full-ictal difference (ID2 had the longest cohort, 96–301 s)
+— is recorded but is untestable with three patients.
+
+## Separately: Layer 1 cross-seizure consistency replicates well
+
+The primary quantity (within-cohort mean Spearman of CTQW per-electrode
+PR rankings, Layer 1) is positive and of similar magnitude in all three
+patients: +0.410, +0.630, +0.535. The "signature electrode" phenomenon
+(some electrodes consistently most-localized or most-spread across a
+patient's seizures) appears in all three (ID1 e28, ID2 e8, ID3 e91).
+These are the replicating results; the onset effect is the one that
+does not cleanly replicate.
+
+## Status
+
+Layer 2's role (from the 2026-09-30 note) is unchanged: Layer 1 (full
+ictal) remains primary, Layer 2 (first 30 s) remains a secondary
+onset-focused view. The weak onset-heterogeneity tendency becomes a
+hypothesis for the HUP phase (ADR 0010, Phase 3), where patient numbers
+will be adequate to test it. This open question is now closed for the
+SWEC-ETHZ cohort.
