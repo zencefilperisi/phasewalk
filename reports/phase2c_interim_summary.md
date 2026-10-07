@@ -1,8 +1,9 @@
 # Phase 2C — Interim Summary
 
-**Date:** 2026-10-03
-**Scope:** micro-steps 13–18 plus diagnostic 15b, on the SWEC-ETHZ
-short-term iEEG dataset (patients ID1, ID2, ID3).
+**Date:** 2026-10-07
+**Scope:** micro-steps 13–20 (incl. diagnostic 15b, null-model 19,
+classical comparison 20), on the SWEC-ETHZ short-term iEEG dataset
+(patients ID1, ID2, ID3).
 **Status:** methodology established on the development patient and
 replicated on two patients; no clinical validation yet (deferred to
 Phase 3 / HUP per ADR 0010).
@@ -74,9 +75,30 @@ Within-patient agreement of CTQW rankings across a patient's seizures
 | ID3     | 2        |       +0.535  |
 
 All three positive, all near 0.5. The ranking carries a reproducible
-within-patient signal, though it is modest — below the 0.4–0.6+ seen
-for well-established functional-connectivity reproducibility measures,
-and with wide confidence intervals for ID2/ID3 (4 and 2 seizures).
+within-patient signal, though it is modest in absolute terms — below
+the 0.4–0.6+ seen for well-established functional-connectivity
+reproducibility measures.
+
+**Permutation test (micro-step 19).** Against a null of independent
+uniform random rankings (20,000 permutations per patient), the observed
+consistency is far beyond chance in all three patients:
+
+| Patient | observed | null mean ± std | z | p |
+|---------|---------:|----------------:|---:|---|
+| ID1     | +0.410   | 0.00 ± 0.025    | +16.6 | < 0.00005 |
+| ID2     | +0.630   | 0.00 ± 0.064    | +9.8  | < 0.00005 |
+| ID3     | +0.535   | 0.00 ± 0.101    | +5.3  | < 0.00005 |
+
+(p = 0.00005 is the permutation floor, 1/20001; the true p is far
+smaller.) The within-patient reproducibility of CTQW rankings is a
+statistically established result, not a chance pattern — including for
+ID3 (a single seizure pair, 98 electrodes).
+
+**Important boundary.** This null is "no structure at all" (random
+permutation). It establishes that the rankings are reproducible, NOT
+that CTQW is more reproducible or more informative than a classical
+centrality on the same FCMs. That comparison is a separate test
+(see section 6).
 
 ### 4.3 Signature electrodes (consistent across all three patients)
 In each patient, specific electrodes stay consistently at the
@@ -92,12 +114,16 @@ Electrode numbers do not correspond across patients (different
 implants), so the replicated observation is the *phenomenon*, not a
 specific electrode: in three independent patients, CTQW singles out a
 stable subset of electrodes. This is consistent with CTQW reflecting a
-stable topological feature of each patient's ictal network. It is not
-yet established, however: we have observed low within-patient rank
-variance for some electrodes but have not tested that variance against
-a null model (e.g. shuffled rankings), so we cannot yet say the
-stability exceeds chance. That null-model test is a near-term next step
-(see section 6).
+stable topological feature of each patient's ictal network.
+
+**Null-model test (micro-step 19).** The most-stable electrode (minimum
+per-electrode rank std) was tested against random permutations: ID1
+p = 0.015, ID2 p = 0.047 (both significant), ID3 p = 0.63
+(inconclusive — with only 2 seizures the min-std statistic cannot
+resolve signal from chance, since a random pair repeats an exact rank
+often enough). This secondary test is not independent of the overall
+consistency test (if rankings are consistent, extremes are stable by
+construction); the primary evidence is the consistency test in 4.2.
 
 ### 4.4 Duration confounder (validated)
 Short seizures (<30 s) produce noisier FCMs. Micro-step 15b: pairs
@@ -114,17 +140,62 @@ ID3 −0.095). The tentative reading — seizure onset is per-seizure
 heterogeneous, full ictal more stereotyped — holds weakly and
 inconsistently. Not a robust claim; flagged as a Phase 3 hypothesis.
 
+### 4.6 CTQW vs classical centralities — the core comparison (micro-step 20)
+On the same seizures and Layer P graphs, cross-seizure consistency of
+CTQW PR was compared against two classical centralities, and the
+distinctness of the CTQW ranking from them was measured.
+
+**Reproducibility (mean pairwise Spearman):**
+
+| Patient | CTQW PR | eigenvector cent. | weighted degree |
+|---------|--------:|------------------:|----------------:|
+| ID1     | +0.410  | +0.447            | +0.538          |
+| ID2     | +0.630  | +0.704            | +0.795          |
+| ID3     | +0.535  | +0.840            | +0.639          |
+
+In all three patients CTQW is the LEAST reproducible of the three. We
+cannot claim CTQW is a more reproducible centrality — the opposite
+holds. (This is partly expected: weighted degree is a simple sum of
+edge weights and is stable whenever overall coupling strength is stable,
+while CTQW PR is a higher-order spectral quantity sensitive to finer
+structure that varies more between seizures. An explanation, not a
+reason to discount the result.)
+
+**Distinctness (within-seizure Spearman, CTQW vs classical):**
+
+| Patient | CTQW vs eigenvector | CTQW vs degree |
+|---------|--------------------:|---------------:|
+| ID1     | −0.016              | −0.280         |
+| ID2     | −0.348              | −0.493         |
+| ID3     | −0.010              | −0.375         |
+
+CTQW is nearly orthogonal to eigenvector centrality (≈ 0 in ID1 and
+ID3) and not redundant with degree. CTQW tracks a reproducible-beyond-
+chance but genuinely DIFFERENT aspect of the ictal network than the
+classical centralities.
+
+**What this does to the thesis.** The project's value does not rest on
+CTQW being a more stable centrality — it is not. It rests on CTQW
+capturing a distinct structure whose clinical meaning is the Phase 3
+question. This result closes off a secondary claim (reproducibility
+superiority) we might otherwise have been tempted to make, and sharpens
+the real one: CTQW is different, and whether "different" is "clinically
+useful" is what Phase 3 must decide.
+
 ## 5. What replicated, what did not
 
 | Result | Replication status |
 |--------|--------------------|
-| CTQW ranking has modest positive within-patient consistency | ✓ all 3 patients |
+| CTQW ranking consistency beyond chance (permutation test) | ✓ all 3 patients, p < 0.00005 |
+| CTQW ranking consistency ABOVE classical centralities | ✗ all 3 patients (CTQW is lower) |
+| CTQW ranking distinct from classical centralities | ✓ all 3 patients (≈ orthogonal to eigenvector) |
 | Signature electrodes exist per patient | ✓ all 3 patients |
-| CTQW spread not explained by degree | ✓ (tested on ID1; consistent with synthetic work) |
 | Onset (Layer 2) less consistent than full ictal | ⚠ 2 of 3, weak |
 
-That not everything replicated is itself reassuring: a result where
-every test passed would raise the suspicion of overfitting.
+That not everything replicated — and that one central hope (CTQW more
+reproducible than classical) was refuted by the data — is itself a sign
+of an honest analysis. A result where every hoped-for effect appeared
+would raise the suspicion of overfitting or wishful framing.
 
 ## 6. Honest limitations
 
@@ -135,13 +206,18 @@ every test passed would raise the suspicion of overfitting.
 - **Small N.** 3 patients; 2 and 4 seizures for the replication
   patients. Confidence intervals are wide. These are directional
   signals, not established effects.
-- **Signature phenomenon not yet tested against a null model.** The
-  "signature electrode" observation (section 4.3) rests on low
-  within-patient rank variance, not on a test that this variance
-  exceeds what shuffled rankings would produce. Until that test is run,
-  it is a suggestive observation, not an established effect. (Near-term
-  next step, doable on the current data.)
-- **Signature not yet tied to anything clinical.** Even once established
+- **CTQW is NOT more reproducible than classical centralities
+  (micro-step 20, settled).** The permutation test (micro-step 19)
+  established CTQW rankings are reproducible beyond chance. The
+  classical comparison (micro-step 20) then showed that classical
+  centralities — eigenvector and weighted degree — are MORE reproducible
+  than CTQW in all three patients. So CTQW's reproducibility is real but
+  not superior. CTQW's justification therefore cannot be "a more stable
+  centrality"; it must be "a distinct structure" (which it is: ≈
+  orthogonal to eigenvector centrality) whose clinical value is still
+  untested. The whole weight of the project's thesis now sits on
+  Phase 3.
+- **Signature not yet tied to anything clinical.** Even established
   against a null, we have not shown the reproduced electrodes mean
   anything clinically. That is the whole point of Phase 3.
 - **One connectivity measure, one layer.** Pearson + Layer P only.
@@ -161,12 +237,19 @@ every test passed would raise the suspicion of overfitting.
 
 ## 8. One-paragraph verdict
 
-Phase 2C established and tested a reproducible CTQW-based analysis of
-real ictal connectivity networks across three patients. The method
-produces a within-patient-stable per-electrode ranking that classical
-degree does not explain, and the stability replicates across three
-independent patients. Whether that stability has clinical meaning is
-unknown and untestable on this dataset — it is the question Phase 3 is
-built to answer. As of 2026-10-03 the project has a validated
-methodology and an honest negative/weak result on the secondary
-questions, but no clinical finding yet.
+Phase 2C established and tested a CTQW-based analysis of real ictal
+connectivity networks across three patients. The per-electrode ranking
+is reproducible beyond chance (permutation test, p < 0.00005, all three
+patients) and is distinct from classical centralities (≈ orthogonal to
+eigenvector centrality). It is NOT more reproducible than those
+classical centralities — in all three patients eigenvector centrality
+and weighted degree are more stable across seizures. So the case for
+CTQW is not "a better/more-stable centrality" but "a different one":
+it captures a reproducible structure that classical measures do not,
+and whether that difference is clinically meaningful is unknown and
+untestable on this dataset. As of 2026-10-07 the project has a
+validated methodology, one established result (reproducible-beyond-
+chance, distinct-from-classical), one refuted hope (reproducibility
+superiority), weak/negative results on the secondary questions, and no
+clinical finding yet. The entire clinical case rests on Phase 3 (HUP,
+with SOZ marks).
