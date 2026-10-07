@@ -388,3 +388,144 @@ onset-focused view. The weak onset-heterogeneity tendency becomes a
 hypothesis for the HUP phase (ADR 0010, Phase 3), where patient numbers
 will be adequate to test it. This open question is now closed for the
 SWEC-ETHZ cohort.
+
+
+# Note added 2026-10-07 (PLV band choice)
+
+ADR 0007 named PLV as the robustness connectivity measure alongside
+Pearson (primary), and set broadband (0.5–150 Hz) as the frequency
+range. It did not specify how PLV handles the band, which matters
+because PLV is a phase measure and the instantaneous phase from the
+Hilbert transform is cleanly defined only for narrowband signals.
+
+## Decision
+
+PLV is computed on the **broadband** signal (0.5–150 Hz, as the dataset
+is already filtered), matching the Pearson choice. This is "Option A"
+from the design discussion.
+
+Rationale:
+- PLV here is a **robustness check only**, never the primary measure.
+  Its job is to answer "do the CTQW findings depend on the Pearson
+  choice, or do they hold under a genuinely different (phase-based)
+  measure?" For that, PLV need not be the gold-standard band-resolved
+  version — it needs to be *different enough* from Pearson. Broadband
+  PLV (phase synchronisation) is clearly different from Pearson
+  (amplitude co-variation): two channels can be high on one and low on
+  the other.
+- Keeping PLV broadband avoids introducing a band-selection parameter,
+  which would be a new free parameter in tension with ADR 0006's
+  parameter-independence rule.
+- This dataset and its reference work (Burrello 2018/2019) use broadband
+  analysis; the ictal frequency content is broad.
+
+## Honest caveat
+
+Broadband PLV is a **coarse** phase measure: the Hilbert phase of a
+broadband signal mixes frequencies and its instantaneous value is less
+interpretable than that of a narrowband signal. It is adequate as a
+different-lens robustness check, but it is NOT gold-standard PLV.
+
+## Deferred to Phase 3
+
+Band-resolved PLV — filtering into canonical bands (theta, alpha, beta,
+gamma) and computing PLV per band — is the methodologically stronger
+version. It introduces band choices and multiple comparisons, so it is
+deferred to Phase 3 (with a mentor and adequate patient numbers), where
+it can be done properly rather than as a quick robustness check.
+
+## Implementation
+
+`data.connectivity.compute_fcm(signal, measure="plv")` returns the
+broadband PLV matrix (values in [0, 1], diagonal 1, symmetric). Since
+PLV is non-negative, the ADR 0008 Layer P / Layer S distinction is
+trivial for PLV (no negatives to clip); the diagonal is still zeroed by
+`fcm_to_graph`.
+
+
+# Note added 2026-10-07 (PLV band choice)
+
+ADR 0007 named PLV as the robustness connectivity measure alongside
+Pearson (primary), and set broadband (0.5–150 Hz) as the frequency
+range. It did not specify how PLV handles the band, which matters
+because PLV is a phase measure and the instantaneous phase from the
+Hilbert transform is cleanly defined only for narrowband signals.
+
+## Decision
+
+PLV is computed on the **broadband** signal (0.5–150 Hz, as the dataset
+is already filtered), matching the Pearson choice. This is "Option A"
+from the design discussion.
+
+Rationale:
+- PLV here is a **robustness check only**, never the primary measure.
+  Its job is to answer "do the CTQW findings depend on the Pearson
+  choice, or do they hold under a genuinely different (phase-based)
+  measure?" For that, PLV need not be the gold-standard band-resolved
+  version — it needs to be *different enough* from Pearson. Broadband
+  PLV (phase synchronisation) is clearly different from Pearson
+  (amplitude co-variation): two channels can be high on one and low on
+  the other.
+- Keeping PLV broadband avoids introducing a band-selection parameter,
+  which would be a new free parameter in tension with ADR 0006's
+  parameter-independence rule.
+- This dataset and its reference work (Burrello 2018/2019) use broadband
+  analysis; the ictal frequency content is broad.
+
+## Honest caveat
+
+Broadband PLV is a **coarse** phase measure: the Hilbert phase of a
+broadband signal mixes frequencies and its instantaneous value is less
+interpretable than that of a narrowband signal. It is adequate as a
+different-lens robustness check, but it is NOT gold-standard PLV.
+
+## Deferred to Phase 3
+
+Band-resolved PLV — filtering into canonical bands (theta, alpha, beta,
+gamma) and computing PLV per band — is the methodologically stronger
+version. It introduces band choices and multiple comparisons, so it is
+deferred to Phase 3 (with a mentor and adequate patient numbers), where
+it can be done properly rather than as a quick robustness check.
+
+## Implementation
+
+`data.connectivity.compute_fcm(signal, measure="plv")` returns the
+broadband PLV matrix (values in [0, 1], diagonal 1, symmetric). Since
+PLV is non-negative, the ADR 0008 Layer P / Layer S distinction is
+trivial for PLV (no negatives to clip); the diagonal is still zeroed by
+`fcm_to_graph`.
+
+## Results (micro-step 22) — commitment discharged
+
+The CTQW pipeline was re-run with PLV FCMs and compared to the
+Pearson-based rankings.
+
+| Patient | per-seizure Pearson-vs-PLV mean | within-cohort consistency (Pearson / PLV) |
+|---------|--------------------------------:|-------------------------------------------:|
+| ID1     | +0.611                          | +0.410 / +0.321 |
+| ID2     | +0.697                          | +0.630 / +0.629 |
+| ID3     | +0.694                          | +0.535 / +0.598 |
+
+Findings:
+1. **CTQW reproducibility is NOT a Pearson artefact.** PLV-based CTQW
+   rankings are about as reproducible across seizures as Pearson-based
+   ones (consistency within ±0.09 in each patient). Using the
+   permutation null of micro-step 19 (which depends only on n), the PLV
+   consistencies are also beyond chance (e.g. ID1 +0.321 is ~13 sigma).
+   So the reproducibility holds under a phase-based measure as well as
+   an amplitude-based one.
+2. **The specific ranking is moderately measure-dependent.** Per-seizure
+   Pearson-vs-PLV agreement is +0.61 to +0.70 — the two measures share
+   the broad structure but emphasise somewhat different electrodes.
+
+This mirrors the Layer S result (micro-step 21) almost exactly:
+moderate per-seizure agreement, similar within-cohort consistency, and
+ID1 the most sensitive on both axes. Two independent robustness checks
+(signed-vs-positive layer, Pearson-vs-PLV measure) converging on the
+same conclusion is stronger than either alone.
+
+**Conclusion:** the reproducibility of CTQW rankings is robust to both
+the layer choice (ADR 0008) and the connectivity-measure choice
+(ADR 0007); the exact per-electrode ranking is moderately sensitive to
+both. The PLV robustness commitment from ADR 0007 is **discharged.**
+Band-resolved PLV remains a Phase 3 refinement.

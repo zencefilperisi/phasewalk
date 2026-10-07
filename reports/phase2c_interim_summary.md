@@ -192,6 +192,19 @@ negatives does not produce a misleading ranking — but negatives carry
 some CTQW-relevant structure (most in ID1), so the two-layer design was
 correct. Both carry to Phase 3 (Layer P primary, Layer S sensitivity).
 
+### 4.8 PLV (phase-based measure) robustness (micro-step 22)
+ADR 0007's second connectivity measure (broadband PLV, a phase-based
+counterpart to Pearson's amplitude-based correlation) was run through
+the CTQW pipeline and compared with the Pearson-based rankings.
+Per-seizure agreement: ID1 +0.611, ID2 +0.697, ID3 +0.694 (moderate).
+Within-cohort consistency under PLV: +0.321 / +0.629 / +0.598, close to
+Pearson's +0.410 / +0.630 / +0.535 — and also beyond chance under the
+micro-step 19 null. Conclusion: CTQW reproducibility is **not a Pearson
+artefact** (it holds under a phase-based measure too), while the exact
+ranking is moderately measure-dependent. This mirrors the Layer S result
+(4.7) almost exactly — two independent robustness checks converging,
+which is stronger than either alone.
+
 ## 5. What replicated, what did not
 
 | Result | Replication status |
@@ -230,11 +243,16 @@ would raise the suspicion of overfitting or wishful framing.
 - **Signature not yet tied to anything clinical.** Even established
   against a null, we have not shown the reproduced electrodes mean
   anything clinically. That is the whole point of Phase 3.
-- **One connectivity measure.** Pearson only; PLV (ADR 0007, a
-  phase-based measure) remains untested — the next planned step. The
-  signed-graph layer (Layer S, ADR 0008) HAS now been tested
-  (micro-step 21): it agrees moderately-to-well with Layer P and is
-  equally reproducible, so the Layer P primary choice is validated.
+- **Robustness checks completed; exact ranking is choice-sensitive.**
+  Both planned robustness checks are done: Layer S (signed graph,
+  micro-step 21) and PLV (phase-based measure, micro-step 22). Both
+  show the same thing — CTQW reproducibility is robust (holds under the
+  signed layer and under PLV, consistency within ±0.09 of Pearson), but
+  the exact per-electrode ranking is moderately sensitive to these
+  choices (per-seizure agreement +0.59 to +0.81). The reproducibility
+  is solid; the precise ranking should not be over-interpreted as if a
+  single electrode order were definitive. Band-resolved PLV remains a
+  Phase 3 refinement.
 
 ## 7. What carries to Phase 3 (HUP, with mentor, post-DGS)
 
