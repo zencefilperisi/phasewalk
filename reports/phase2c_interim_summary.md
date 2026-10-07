@@ -182,6 +182,16 @@ superiority) we might otherwise have been tempted to make, and sharpens
 the real one: CTQW is different, and whether "different" is "clinically
 useful" is what Phase 3 must decide.
 
+### 4.7 Layer S (signed graph) robustness (micro-step 21)
+ADR 0008's deferred signed-graph check was run: CTQW rankings on Layer S
+(negatives kept) vs Layer P (negatives clipped). Per-seizure agreement
+between the two: ID1 +0.587, ID2 +0.806, ID3 +0.778 (moderate to high).
+Layer S is about as reproducible as Layer P (consistency within ±0.08
+in each patient). Conclusion: Layer P is validated as primary — clipping
+negatives does not produce a misleading ranking — but negatives carry
+some CTQW-relevant structure (most in ID1), so the two-layer design was
+correct. Both carry to Phase 3 (Layer P primary, Layer S sensitivity).
+
 ## 5. What replicated, what did not
 
 | Result | Replication status |
@@ -220,8 +230,11 @@ would raise the suspicion of overfitting or wishful framing.
 - **Signature not yet tied to anything clinical.** Even established
   against a null, we have not shown the reproduced electrodes mean
   anything clinically. That is the whole point of Phase 3.
-- **One connectivity measure, one layer.** Pearson + Layer P only.
-  PLV (ADR 0007) and signed-graph Layer S (ADR 0008) remain untested.
+- **One connectivity measure.** Pearson only; PLV (ADR 0007, a
+  phase-based measure) remains untested — the next planned step. The
+  signed-graph layer (Layer S, ADR 0008) HAS now been tested
+  (micro-step 21): it agrees moderately-to-well with Layer P and is
+  equally reproducible, so the Layer P primary choice is validated.
 
 ## 7. What carries to Phase 3 (HUP, with mentor, post-DGS)
 

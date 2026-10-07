@@ -174,3 +174,67 @@ Layer P results are in hand and there is something to compare against.
 - Whether the signed-graph CTQW literature has settled on a preferred
   spreading metric that differs from the participation ratio we use
   now — this needs checking before Layer S is implemented.
+
+# Note added 2026-10-07 (Layer S robustness check completed)
+
+ADR 0008 deferred a signed-graph (Layer S) robustness check for CTQW,
+committing to run it once Layer P results were in hand. Micro-step 21
+ran it: Layer S CTQW per-electrode rankings (negatives kept, diagonal
+zeroed) were computed on the same seizures as the Layer P analysis and
+compared.
+
+## Results
+
+**Per-seizure agreement** (Spearman between Layer P and Layer S ranking
+of the same seizure):
+
+| Patient | mean P-vs-S Spearman |
+|---------|---------------------:|
+| ID1     | +0.587 (range 0.40–0.73) |
+| ID2     | +0.806               |
+| ID3     | +0.778               |
+
+**Within-cohort consistency** (is Layer S itself reproducible?):
+
+| Patient | Layer P | Layer S |
+|---------|--------:|--------:|
+| ID1     | +0.410  | +0.354  |
+| ID2     | +0.630  | +0.660  |
+| ID3     | +0.535  | +0.617  |
+
+## Conclusion
+
+1. The two layers agree moderately (ID1) to well (ID2, ID3); they are
+   related but not interchangeable. Keeping vs discarding negative
+   correlations changes the CTQW ranking by a patient-dependent amount,
+   most in ID1 (mean agreement 0.59, i.e. the rankings share the broad
+   structure but differ in detail).
+
+2. Layer S is about as reproducible across seizures as Layer P
+   (consistency within ±0.08 in every patient; neither dominates).
+   The signed representation is not noisier — it is a stable
+   representation in its own right.
+
+3. **ADR 0008's primary choice (Layer P) is validated.** Clipping
+   negatives does not produce a misleading or degenerate ranking: it
+   agrees substantially with the full signed analysis. At the same
+   time, negatives do carry some CTQW-relevant structure (the rankings
+   are not identical), which is exactly why ADR 0008 kept Layer S as a
+   reported robustness layer rather than discarding the signed
+   information entirely. The two-layer design was the right call.
+
+4. A patient-level observation (not a claim): ID1 shows both the lowest
+   P-vs-S agreement and the lowest within-cohort consistency. A
+   plausible reason is that ID1's 13-seizure cohort is the most varied,
+   making its FCMs more variable along both axes. Untestable as a causal
+   claim with three patients.
+
+## Status
+
+The Layer S robustness commitment from ADR 0008 is **discharged**. Both
+layers carry to Phase 3: Layer P as primary, Layer S as a sensitivity
+check, with the expectation (from this cohort) that they agree
+moderately-to-well. If a Phase 3 patient shows strong P-vs-S divergence,
+that divergence is itself worth reporting — it would indicate that
+anti-correlated electrode pairs are shaping the CTQW ranking in that
+patient.
