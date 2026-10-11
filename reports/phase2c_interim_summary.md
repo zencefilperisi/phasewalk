@@ -1,12 +1,15 @@
 # Phase 2C — Interim Summary
 
-**Date:** 2026-10-07
-**Scope:** micro-steps 13–20 (incl. diagnostic 15b, null-model 19,
-classical comparison 20), on the SWEC-ETHZ short-term iEEG dataset
+**Date:** 2026-10-12 (micro-steps 13–20 frozen 2026-10-07; robustness
+21–22 and characterization 23 added 2026-10-12)
+**Scope:** micro-steps 13–23 (incl. diagnostic 15b, null-model 19,
+classical comparison 20, Layer S robustness 21, PLV robustness 22,
+characterization 23), on the SWEC-ETHZ short-term iEEG dataset
 (patients ID1, ID2, ID3).
-**Status:** methodology established on the development patient and
-replicated on two patients; no clinical validation yet (deferred to
-Phase 3 / HUP per ADR 0010).
+**Status:** methodology established on the development patient,
+replicated on two patients, and completed on the SWEC-ETHZ cohort
+(both planned robustness checks + characterization done); no clinical
+validation yet (deferred to Phase 3 / HUP per ADR 0010).
 
 This document freezes the state of Phase 2C before moving to the next
 major phase. It is an honest account of what was built, what was found,
@@ -205,6 +208,47 @@ ranking is moderately measure-dependent. This mirrors the Layer S result
 (4.7) almost exactly — two independent robustness checks converging,
 which is stronger than either alone.
 
+### 4.9 What the CTQW ranking tracks — characterization (micro-step 23)
+Section 4.6 showed CTQW is distinct from eigenvector centrality and
+degree. This step asks the positive question: is the CTQW PR ranking
+explained by ANY interpretable, independently-meaningful node property?
+Four interpretable centralities were correlated (per-seizure Spearman,
+averaged per patient) against CTQW PR on the real Layer P graphs, plus
+spectral participation as a deliberately-flagged tautological reference
+(Ziegler 2024: time-averaged return probability is definitionally tied
+to spectral participation, so it is a ceiling, not a finding).
+
+| measure | ID1 | ID2 | ID3 |
+|---------|----:|----:|----:|
+| weighted degree | −0.280 | −0.493 | −0.375 |
+| eigenvector | −0.016 | −0.348 | −0.010 |
+| betweenness | +0.102 | +0.389 | −0.210 |
+| clustering | −0.275 | −0.466 | −0.207 |
+| *spectral participation (tautological)* | *+0.875* | *+0.705* | *+0.830* |
+
+**Finding.** No interpretable centrality strongly explains CTQW PR in
+any patient. The best interpretable predictor is weighted degree, and
+even that is only weak-to-moderate (|rho| 0.28–0.49) and never reaches
+0.5. Eigenvector centrality is essentially zero in ID1 (−0.02) and ID3
+(−0.01), re-confirming the 4.6 orthogonality from a second angle. Only
+spectral participation is strong — and that is tautological, so it is a
+reference ceiling, not an explanation. **CTQW PR is not reducible to a
+single named classical centrality; it tracks a whole-spectrum property**
+(consistent with the synthetic finding, micro-steps 6–9).
+
+**A weak thread, deliberately not over-claimed.** Degree and clustering
+are negative in all three patients (degree −0.28/−0.49/−0.38; clustering
+−0.28/−0.47/−0.21): higher-degree / more-clustered electrodes tend to be
+more localized under the walk (lower PR). The direction is physically
+plausible (clustering-induced localization: dense neighbourhoods trap
+the walk via destructive interference). But it is weak (|rho| ≤ 0.49,
+mostly < 0.4, at most ~24% variance in ID2 — the 4-seizure patient, so
+least reliable) AND it was already shown non-robust on synthetic graphs
+(micro-step 8, 100-graph mean −0.087). It is therefore recorded as a
+consistent-but-weak, non-robust observation — noted, not built upon. The
+headline remains: CTQW is spectrally distinct and not reducible to a
+named centrality.
+
 ## 5. What replicated, what did not
 
 | Result | Replication status |
@@ -213,7 +257,9 @@ which is stronger than either alone.
 | CTQW ranking consistency ABOVE classical centralities | ✗ all 3 patients (CTQW is lower) |
 | CTQW ranking distinct from classical centralities | ✓ all 3 patients (≈ orthogonal to eigenvector) |
 | Signature electrodes exist per patient | ✓ all 3 patients |
+| CTQW reducible to a named interpretable centrality | ✗ all 3 patients (best \|rho\| 0.49, spectrally distinct) |
 | Onset (Layer 2) less consistent than full ictal | ⚠ 2 of 3, weak |
+| Degree/clustering → lower CTQW PR (localization) | ⚠ consistent sign, weak & non-robust (synthetic micro-step 8) |
 
 That not everything replicated — and that one central hope (CTQW more
 reproducible than classical) was refuted by the data — is itself a sign
@@ -274,13 +320,18 @@ is reproducible beyond chance (permutation test, p < 0.00005, all three
 patients) and is distinct from classical centralities (≈ orthogonal to
 eigenvector centrality). It is NOT more reproducible than those
 classical centralities — in all three patients eigenvector centrality
-and weighted degree are more stable across seizures. So the case for
-CTQW is not "a better/more-stable centrality" but "a different one":
-it captures a reproducible structure that classical measures do not,
-and whether that difference is clinically meaningful is unknown and
-untestable on this dataset. As of 2026-10-07 the project has a
-validated methodology, one established result (reproducible-beyond-
-chance, distinct-from-classical), one refuted hope (reproducibility
-superiority), weak/negative results on the secondary questions, and no
-clinical finding yet. The entire clinical case rests on Phase 3 (HUP,
-with SOZ marks).
+and weighted degree are more stable across seizures. Characterization
+(micro-step 23) confirms the distinctness positively: no interpretable
+named centrality explains CTQW PR (best predictor, weighted degree,
+|rho| ≤ 0.49), so CTQW tracks a whole-spectrum property not reducible
+to a single classical measure. So the case for CTQW is not "a
+better/more-stable centrality" but "a different one": it captures a
+reproducible structure that classical measures do not, and whether that
+difference is clinically meaningful is unknown and untestable on this
+dataset. As of 2026-10-12 the project has a validated methodology,
+complete on the SWEC-ETHZ cohort (both robustness checks + a positive
+characterization), with one established result (reproducible-beyond-
+chance, distinct-from-classical and not reducible to a named
+centrality), one refuted hope (reproducibility superiority), weak/
+negative results on the secondary questions, and no clinical finding
+yet. The entire clinical case rests on Phase 3 (HUP, with SOZ marks).
