@@ -108,3 +108,52 @@ def time_averaged_distribution(adjacency, start_node, times, quantum=True,
         else:
             acc += classical_diffusion(adjacency, start_node, t)
     return acc / len(times)
+
+
+def time_averaged_distribution_all(adjacency, times, quantum=True,
+                                   hamiltonian="adjacency"):
+    """Time-averaged distribution for EVERY start node at once.
+
+    Returns an (n, n) array ``avg`` where ``avg[:, s]`` is the time-averaged
+    distribution for a walk started at node ``s`` -- identical, to floating
+    point precision, to stacking ``time_averaged_distribution(adjacency, s,
+    times, ...)`` over all ``s``.
+
+    This is a pure speed optimization, not a methodology change: instead of one
+    matrix exponential per (start node, time), it diagonalizes the (symmetric)
+    Hamiltonian once and reuses the eigenbasis to form each time step's
+    propagator. For n electrodes and T times it replaces n*T expm calls with
+    one eigendecomposition plus T cheap reconstructions -- about n times less
+    work. Equivalence to the per-node function is asserted in test_walks_fast.
+
+    Use this to compute the per-electrode participation-ratio vector for a
+    seizure:  pr = [participation_ratio(avg[:, s]) for s in range(n)].
+    """
+    n = adjacency.shape[0]
+    if hamiltonian == "adjacency":
+        H = adjacency
+    elif hamiltonian == "laplacian":
+        H = laplacian(adjacency)
+    else:
+        raise ValueError(
+            f"hamiltonian must be 'adjacency' or 'laplacian', got {hamiltonian!r}")
+
+    if quantum:
+        # H is real symmetric -> real orthogonal eigenbasis.
+        vals, V = np.linalg.eigh(H)
+        acc = np.zeros((n, n))
+        for t in times:
+            phase = np.exp(-1j * vals * t)        # e^{-i lambda t}
+            Mt = (V * phase) @ V.conj().T          # = expm(-i H t)
+            acc += np.abs(Mt) ** 2                 # column s = |psi_t| for start s
+        return acc / len(times)
+    else:
+        # Classical diffusion always uses the Laplacian; L real symmetric.
+        L = laplacian(adjacency)
+        vals, V = np.linalg.eigh(L)
+        acc = np.zeros((n, n))
+        for t in times:
+            decay = np.exp(-vals * t)
+            Mt = (V * decay) @ V.T                  # = expm(-L t), real
+            acc += Mt
+        return acc / len(times)

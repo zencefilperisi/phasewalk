@@ -186,7 +186,10 @@ class RunPaths:
 
 
 def discover_ictal_runs(subject_dir) -> list[RunPaths]:
-    """All ictal runs for a subject that have signal + channels + events."""
+    """All ictal runs for a subject that have the FULL fileset: the BrainVision
+    header (.vhdr), the data file (.eeg), channels.tsv and events.tsv. Runs
+    whose .eeg data file is missing (an incomplete download) are skipped, so the
+    pipeline runs on whatever is fully present."""
     subject_dir = Path(subject_dir)
     subj = subject_dir.name.replace("sub-", "")
     runs: list[RunPaths] = []
@@ -194,8 +197,9 @@ def discover_ictal_runs(subject_dir) -> list[RunPaths]:
         stem = vhdr.name.replace("_ieeg.vhdr", "")
         ch = vhdr.with_name(stem + "_channels.tsv")
         ev = vhdr.with_name(stem + "_events.tsv")
+        eeg = vhdr.with_name(stem + "_ieeg.eeg")
         run = next((p for p in stem.split("_") if p.startswith("run-")), "run-?")
-        if ch.exists() and ev.exists():
+        if ch.exists() and ev.exists() and eeg.exists():
             runs.append(RunPaths(subj, run, vhdr, ch, ev))
     return runs
 
@@ -234,7 +238,11 @@ def load_ictal_window(run: RunPaths, window: float = WINDOW_SECONDS
                         dropped_reason="no onset marker")
 
     good_names, all_names = _good_and_all(run.channels_tsv)
-    raw = mne.io.read_raw_brainvision(str(run.vhdr), preload=True, verbose="ERROR")
+    try:
+        raw = mne.io.read_raw_brainvision(str(run.vhdr), preload=True, verbose="ERROR")
+    except (FileNotFoundError, OSError) as e:
+        return IctalRun(run.subject, run.run, 0.0, [], [], np.empty((0, 0)),
+                        win, dropped_reason=f"signal unreadable ({e.__class__.__name__})")
     sfreq = float(raw.info["sfreq"])
     rec_dur = raw.n_times / sfreq
     if win.win_end > rec_dur:          # not enough signal after onset

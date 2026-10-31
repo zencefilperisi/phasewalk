@@ -45,3 +45,29 @@ theory/*.toc
 theory/*.synctex.gz
 
 exploration/figures/
+
+echo phasewalk-env/> .gitignore
+echo __pycache__/>> .gitignore
+echo .pytest_cache/>> .gitignore
+echo *.pyc>> .gitignore
+
+
+# ds003029 dataset (raw iEEG stays out of git)
+exploration/ds003029/sub-*/
+exploration/ds003029/sourcedata/
+*.eeg
+*.vhdr
+*.vmrk
+
+
+# ds003029 dataset metadata (not our code)
+exploration/ds003029/.datalad/
+exploration/ds003029/.bidsignore
+exploration/ds003029/.gitattributes
+exploration/ds003029/CHANGES
+exploration/ds003029/README
+exploration/ds003029/annex-uuid
+exploration/ds003029/dataset_description.json
+exploration/ds003029/participants.json
+exploration/ds003029/participants.tsv
+exploration/ds003029/sourcedata/

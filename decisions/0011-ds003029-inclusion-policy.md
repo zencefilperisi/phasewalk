@@ -89,3 +89,39 @@ Engel I (seizure-free).
   derived from the inconsistent electrographic onset/offset markers in
   `events.tsv`) is a separate decision, pending the events audit (ds003029
   step 4), to be recorded in its own ADR.
+
+# Note added 2026-10-30 to ADR 0011 (umf002–005 exclusion)
+
+Four UMF subjects (umf002, umf003, umf004, umf005) are excluded from the
+ds003029 cohort because **the published BrainVision signal is shorter than the
+annotated seizure**, so the ADR-0012 ictal window [onset, onset+30 s] cannot be
+formed.
+
+## Verification: dataset property, not an incomplete download
+
+This was checked against the OpenNeuro S3 source directly:
+
+    s3://openneuro.org/.../sub-umf004_..._ictal_acq-seeg_run-01_ieeg.eeg
+      = 355,472 bytes on S3  ==  355,472 bytes locally
+
+i.e. the local file is a complete copy of what the server publishes — not a
+truncated transfer. The `events.tsv` for these runs marks the seizure onset far
+beyond the end of the published signal (e.g. umf004: onset at 135 s, while the
+~355 KB SEEG file holds only a few seconds). The UMF SEEG files carry a later
+processing date (Apr 2021) than the rest of the dataset (Dec 2020); the most
+likely cause is that the signal was trimmed during the EDF→BrainVision
+conversion while `events.tsv` kept the original EDF timeline.
+
+umf001 (99 MB signal, onset 60 s, offset 91 s — intact) is **retained**.
+
+## Effect on the cohort
+
+- usable cohort: 33 → **29**
+- Engel I: 19 → **17** (umf004, umf005 removed)
+
+umf004 and umf005 have SOZ fractions of 0.66 and 0.50, where per-subject AUC is
+near-undefined and contributes essentially noise, so their removal does not
+change the primary result (Engel-I median AUC 0.39, one-sided Wilcoxon
+p = 0.96). The cohort-build step now validates, per run, that the ictal window
+falls within the published signal, so the frozen cohort equals the analysed
+cohort (no silent NaNs downstream).
